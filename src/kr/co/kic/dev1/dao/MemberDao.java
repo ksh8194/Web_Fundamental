@@ -42,7 +42,7 @@ public class MemberDao {
 			
 			StringBuffer sql = new StringBuffer();
 			sql.append("INSERT INTO member(m_id,m_email,m_pwd )");
-			sql.append("VALUES(?,?,PASSWORD(? ));");
+			sql.append("VALUES(?,?,PASSWORD(? )) ");
 			pstmt = con.prepareStatement(sql.toString());
 			int index = 1;
 			pstmt.setString(index++,m.getId());

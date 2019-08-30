@@ -24,17 +24,20 @@
 						<div class="table-responsive-md">
 							<table class="table table-hover">
 								<colgroup>
-									<col width="10%" />
-									<col width="12%" />
-									<col width="65%" />
-									<col width="15%" />
+									
+									<col width="20%" />
+									<col width="20%" />
+									<col width="22%" />
+									<col width="25%" />
+									<col width="25%" />
 								</colgroup>
 								<thead>
 									<tr>
-										<th scope="col">#</th>
-										<th scope="col">작성자</th>
-										<th scope="col">제목</th>
-									     <th scope="col">등록날짜</th>
+										<th scope="col">사원번호</th>
+										<th scope="col">사원이름</th>
+									     <th scope="col">직급</th>
+									     <th scope="col">사수</th>
+									     <th scope="col">입사날짜</th>
 									</tr>
 								</thead>
 								<tbody>
@@ -52,6 +55,8 @@
 										<th scope="row"><%=num %></th>
 										<td><%=writer %></td>
 										<td><a href="view.jsp?num=<%=num%>"><%=title %></a></td>
+										<td><%=regdate %></td>
+										<td><%=regdate %></td>
 										<td><%=regdate %></td>
 									</tr>
 									

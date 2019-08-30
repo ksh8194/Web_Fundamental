@@ -32,14 +32,14 @@ public class NoticeDao {
 			con = ConnLocator.getConnection();
 			StringBuffer sql = new StringBuffer();
 			sql.append("INSERT INTO notice(n_num,n_writer,n_title,n_content,n_regdate) ");
-			sql.append("VALUES(NULL,?,?,'?,NOW()) ");
+			sql.append("VALUES(NULL,?,?,?,NOW()) ");
 
 			pstmt = con.prepareStatement(sql.toString());
 			// 바인딩 변수 세팅
 			pstmt.setString(index++, n.getWriter());
 			pstmt.setString(index++, n.getTitle());
 			pstmt.setString(index++, n.getContent());
-			pstmt.setString(index, n.getRegdate());
+			
 
 			pstmt.executeUpdate();
 			isSuccess = true;
@@ -115,7 +115,7 @@ public class NoticeDao {
 			try {
 				con = ConnLocator.getConnection();
 				StringBuffer sql = new StringBuffer();
-				sql.append("DELETE FROM notice WHERE n_num = 1 ");
+				sql.append("DELETE FROM notice WHERE n_num = ? ");
 								
 				pstmt = con.prepareStatement(sql.toString());
 				// 바인딩 변수 세팅
@@ -154,7 +154,7 @@ public class NoticeDao {
 			StringBuffer sql = new StringBuffer();
 			sql.append("SELECT n_num,n_writer,n_title,n_content ,n_regdate ");
 			sql.append("FROM notice ");
-			sql.append("where num = ?");
+			sql.append("where n_num = ?");
 			
 			pstmt = con.prepareStatement(sql.toString());
 			pstmt.setInt(index++, num);

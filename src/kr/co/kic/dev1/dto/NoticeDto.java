@@ -19,9 +19,19 @@ public class NoticeDto {
 	public NoticeDto(int num, String writer, String title , String regdate) {
 		this(num,writer,title,null,regdate);
 	}
+	
+	
+	public NoticeDto(String writer, String title, String content) {
+		this(0,writer,title,content,null);
+	}
+	
+	
 	public NoticeDto() {
 		super();
 	}
+	
+	
+	
 	public int getNum() {
 		return num;
 	}
