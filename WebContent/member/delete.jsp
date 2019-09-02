@@ -4,6 +4,7 @@
 <%
 	request.setCharacterEncoding("utf-8");
 	int seq = Integer.parseInt(request.getParameter("seq"));
+	int cPage = Integer.parseInt(request.getParameter("page"));
 	
 	MemberDao dao = MemberDao.getInstance();
 	
@@ -12,7 +13,7 @@
 	%>	
 	<script>
 	alert("삭제성공");
-	location.href="list.jsp";
+	location.href="list.jsp?page=<%=cPage%>";
 	</script>
 	<%}else{%>
 	

@@ -14,6 +14,34 @@
 	0 + (page-1)*10
 */
 
+
+
+/*
+totalPage => 128 개
+
+cPage = 1 : startPage =1 , endPage = 10;
+cPage = 2 : startPage = 1, endPage = 10;
+..
+cPage = 10 : startPage = 1 , endPage = 10;
+
+currrentBlock = 1 => startPage = 1, endPage = 10;
+
+cPage = 11 : startPage = 11, endPage = 20;
+cPage = 12 : startPage = 11, endPage = 20;
+...
+cPage = 20 : startPage = 11, endPage = 20;
+
+currrentBlock = 2 => startPage = 11, endPage = 20;
+
+cPage = 21 : startPage = 21 , endPage = 26;
+cPage = 22 : startPage = 21 , endPage = 26;
+....
+cPage = 26 : startPage = 21 , endPage = 26;
+
+currrentBlock = 3 => startPage = 21, endPage = 30;
+
+*/
+
 String tempPage = request.getParameter("page");
 int cPage = 0;
 if(tempPage == null || tempPage.length()==0){
@@ -32,7 +60,41 @@ int start = (cPage-1)*length;
 
 	MemberDao dao = MemberDao.getInstance();
 	ArrayList<MemberDto> list = dao.select(start,length);
+
+
+	int totalRows = dao.getRows(); // 63개
+	int totalPage = 0;
+	int startPage = 0;
+	int endPage = 0;
+	int pageLength = 5;
+	//대입 = (true) ? (true면 이거 수행) : (false면 이거 수행);
+	totalPage = totalRows%length == 0 ? 
+			totalRows/length : 
+				totalRows/length + 1;
+	if(totalPage ==0){
+		totalPage = 1;
+	}
+	
+	int currentBlock = cPage % pageLength == 0 ?
+			cPage/pageLength : cPage/pageLength + 1;
+	int totalBlock = totalPage % pageLength == 0?
+			totalPage/pageLength : totalPage/pageLength +1;
+	
+	//An = a1 + (n-1)*d n=>currentBlock
+	//startPage = 1 , 11 , 21 
+	startPage = 1 + (currentBlock - 1)*pageLength;
+	//endPage => 10 , 20 , 30 ,.....
+	endPage = pageLength + (currentBlock -1) * pageLength;
+	
+	if(currentBlock == totalBlock){
+		endPage = totalPage;
+	}
+
 %>
+
+
+
+
 	<nav aria-label="breadcrumb">
 		<ol class="breadcrumb justify-content-end">
 			<li class="breadcrumb-item"><a href="/">Home</a></li>
@@ -81,7 +143,7 @@ int start = (cPage-1)*length;
 									<tr>
 										<th scope="row"><%=seq %></th>
 										<td><%=name %></td>
-										<td><a href="view.jsp?seq=<%=seq%>"><%=id %></a></td>
+										<td><a href="view.jsp?seq=<%=seq%>&page=<%=cPage%>"><%=id %></a></td>
 										<td><%=email %></td>
 										<td><%=phone %></td>
 										<td><%=regdate %></td>
@@ -95,62 +157,7 @@ int start = (cPage-1)*length;
 									<%} %>
 								</tbody>
 							</table>
-							<%
-							
-							/*
-							totalPage => 128 개
-							
-							cPage = 1 : startPage =1 , endPage = 10;
-							cPage = 2 : startPage = 1, endPage = 10;
-							..
-							cPage = 10 : startPage = 1 , endPage = 10;
-							
-							currrentBlock = 1 => startPage = 1, endPage = 10;
-							
-							cPage = 11 : startPage = 11, endPage = 20;
-							cPage = 12 : startPage = 11, endPage = 20;
-							...
-							cPage = 20 : startPage = 11, endPage = 20;
-							
-							currrentBlock = 2 => startPage = 11, endPage = 20;
-							
-							cPage = 21 : startPage = 21 , endPage = 26;
-							cPage = 22 : startPage = 21 , endPage = 26;
-							....
-							cPage = 26 : startPage = 21 , endPage = 26;
-							
-							currrentBlock = 3 => startPage = 21, endPage = 30;
-							
-							*/
-								int totalRows = dao.getRows(); // 63개
-								int totalPage = 0;
-								int startPage = 0;
-								int endPage = 0;
-								int pageLength = 5;
-								//대입 = (true) ? (true면 이거 수행) : (false면 이거 수행);
-								totalPage = totalRows%length == 0 ? 
-										totalRows/length : 
-											totalRows/length + 1;
-								if(totalPage ==0){
-									totalPage = 1;
-								}
-								
-								int currentBlock = cPage % pageLength == 0 ?
-										cPage/pageLength : cPage/pageLength + 1;
-								int totalBlock = totalPage % pageLength == 0?
-										totalPage/pageLength : totalPage/pageLength +1;
-								
-								//An = a1 + (n-1)*d n=>currentBlock
-								//startPage = 1 , 11 , 21 
-								startPage = 1 + (currentBlock - 1)*pageLength;
-								//endPage => 10 , 20 , 30 ,.....
-								endPage = pageLength + (currentBlock -1) * pageLength;
-								
-								if(currentBlock == totalBlock){
-									endPage = totalPage;
-								}
-							
-							%>
+						
 
 							<nav aria-label="Page navigation example">
 								<ul class="pagination pagination-lg justify-content-center">
@@ -167,7 +174,7 @@ int start = (cPage-1)*length;
 									
 									
 									<%for(int i=startPage;i<=endPage;i++){ %>
-									<li class="page-item"><a class="page-link" href="list.jsp?page=<%=i%>"> <%=i %></a></li>
+									<li class="page-item <%if(cPage==i){%>active<%}%>"><a class="page-link" href="list.jsp?page=<%=i %>"> <%=i %></a></li>
 									<%} %>
 									
 									<%if(currentBlock != totalBlock){ %>

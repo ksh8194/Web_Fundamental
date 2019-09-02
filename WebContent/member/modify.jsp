@@ -6,6 +6,7 @@
 <%
 	request.setCharacterEncoding("utf-8");
 	int seq = Integer.parseInt(request.getParameter("seq"));
+	int cPage = Integer.parseInt(request.getParameter("page"));
 	String name = request.getParameter("name");
 	String id = request.getParameter("id");
 	String email = request.getParameter("email");
@@ -18,7 +19,7 @@
 %>
 	<script>
 		alert('수정성공');
-		location.href="view.jsp?seq=<%=seq%>";
+		location.href="view.jsp?seq=<%=seq%>&page=<%=cPage%>";
 	</script>
 <%}else{%>
 	<script>
