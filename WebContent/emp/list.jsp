@@ -1,17 +1,16 @@
-<%@page import="kr.co.kic.dev1.dto.NoticeDto"%>
-<%@page import="java.util.ArrayList"%>
-<%@page import="kr.co.kic.dev1.dao.NoticeDao"%>
 <%@ page pageEncoding="UTF-8"%>
+<%@ page import="kr.co.kic.dev1.dto.EmpDto"%>
+<%@ page import="java.util.ArrayList"%>
+<%@ page import="kr.co.kic.dev1.dao.EmpDao"%>
 <%@ include file="../inc/header.jsp" %>
 <%
-	NoticeDao dao = NoticeDao.getInstance();
-	ArrayList<NoticeDto> list = dao.select(0,100);
-
- %>
+	EmpDao dao = EmpDao.getInstance();
+	ArrayList<EmpDto> list = dao.select(0, 100);
+%>
 	<nav aria-label="breadcrumb">
 		<ol class="breadcrumb justify-content-end">
 			<li class="breadcrumb-item"><a href="/">Home</a></li>
-			<li class="breadcrumb-item active" aria-current="page">Legister</li>
+			<li class="breadcrumb-item active" aria-current="page">Emp</li>
 		</ol>
 	</nav>
 	<div class="container">
@@ -19,53 +18,55 @@
 			<div class="col-sm-12">
 				<div class="card">
 					<div class="card-body">
-						<h5 class="card-title">회원리스트</h5>
-
+						<h5 class="card-title">사원</h5>
 						<div class="table-responsive-md">
 							<table class="table table-hover">
 								<colgroup>
-									
-									<col width="20%" />
-									<col width="20%" />
-									<col width="22%" />
-									<col width="25%" />
+									<col width="15%" />
+									<col width="15%" />
+									<col width="15%" />
+									<col width="15%" />
+									<col width="15%" />
 									<col width="25%" />
 								</colgroup>
 								<thead>
 									<tr>
 										<th scope="col">사원번호</th>
-										<th scope="col">사원이름</th>
-									     <th scope="col">직급</th>
-									     <th scope="col">사수</th>
-									     <th scope="col">입사날짜</th>
+										<th scope="col">이름</th>
+										<th scope="col">직책</th>
+										<th scope="col">사수</th>
+										<th scope="col">부서번호</th>
+										<th scope="col">입사날짜</th>
 									</tr>
 								</thead>
 								<tbody>
-								<%
-								if(list.size()!=0){
-									for(int i=0;i<list.size();i++){
-										NoticeDto dto = list.get(i);
-										int num = dto.getNum();
-										String writer = dto.getWriter();
-										String title = dto.getTitle();
-										String regdate = dto.getRegdate();
-									
-								%>
+									<%
+									if(list.size() != 0){
+										for(int i=0;i<list.size();i++){
+											EmpDto dto = list.get(i);
+											int no = dto.getNo();
+											String name = dto.getName();
+											String job = dto.getJob();
+											int mgr = dto.getMgr();
+											String hiredate = dto.getHiredate();
+											int deptno = dto.getDeptNo();
+									%>
 									<tr>
-										<th scope="row"><%=num %></th>
-										<td><%=writer %></td>
-										<td><a href="view.jsp?num=<%=num%>"><%=title %></a></td>
-										<td><%=regdate %></td>
-										<td><%=regdate %></td>
-										<td><%=regdate %></td>
+										<th scope="row"><%=no  %></th>
+										<td><a href="view.jsp?no=<%=no%>"><%=name %></a></td>
+										<td><%=job %></td>
+										<td><%=mgr %></td>
+										<td><a href="../dept/view.jsp?no=<%=deptno%>"><%=deptno %></a></td>
+										<td><%=hiredate %></td>
 									</tr>
-									
-										<%}
-								}else{ %>
-										<tr>
-											<th colspan="4" scope="row"> 공지된 게시물이 없습니다.</th>
-											</tr>
-										<%} %>
+									<%
+										}
+									}else{ 
+									%>
+									<tr>
+										<td class="text-center" colspan="6" scope="row">사원정보가 없습니다.</td>
+									</tr>
+									<%} %>
 								</tbody>
 							</table>
 
@@ -91,15 +92,13 @@
 							</nav>
 
 							<div class="text-right">
-								<a href="write.jsp" class="btn btn-outline-primary">글쓰기</a>
-								<a href="#" class="btn btn-outline-success">리스트</a>
+								<a href="write.jsp" class="btn btn-outline-primary">사원등록</a>
 							</div>
-
 						</div>
 					</div>
 				</div>
-
 			</div>
+
 		</div>
-		
-<%@ include file="../inc/footer.jsp" %>
+	</div>
+	<%@ include file="../inc/footer.jsp"%>

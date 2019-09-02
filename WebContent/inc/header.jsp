@@ -28,10 +28,13 @@
 					<a class="nav-link" href="/">Home</a>
 				</li>
 				<li class="nav-item">
-					<a class="nav-link" href="/notice/list.jsp">Noitce</a>
+					<a class="nav-link" href="/notice/list.jsp">Notice</a>
 				</li>
 				<li class="nav-item">
 					<a class="nav-link" href="/member/list.jsp">Member</a>
+				</li>
+				<li class="nav-item">
+					<a class="nav-link" href="/emp/list.jsp">Emp</a>
 				</li>
 
 			</ul>
@@ -42,6 +45,7 @@
 				<li class="nav-item">
 					<a class="nav-link" href="/member/login.jsp"><i class="fa fa-user"></i>Login</a>
 				</li>
+				
 			</ul>
 		</div>
 	</nav>
