@@ -30,6 +30,9 @@
 				<li class="nav-item">
 					<a class="nav-link" href="/notice/list.jsp">Noitce</a>
 				</li>
+				<li class="nav-item">
+					<a class="nav-link" href="/member/list.jsp">Member</a>
+				</li>
 
 			</ul>
 			<ul class="navbar-nav">

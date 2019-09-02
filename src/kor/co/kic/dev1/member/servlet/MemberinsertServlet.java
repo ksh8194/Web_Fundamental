@@ -32,7 +32,8 @@ public class MemberinsertServlet extends HttpServlet {
 		String password = request.getParameter("password");
 		
 		MemberDao dao = MemberDao.getInstance();
-		MemberDto m = new MemberDto(id,email,password);
+		//MemberDto m = new MemberDto(id,email,password);
+		MemberDto m = new MemberDto();
 		boolean isSuccess = dao.insert(m);
 		
 		if(isSuccess) {

@@ -2,73 +2,257 @@ package kr.co.kic.dev1.dao;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
-
-import javax.naming.Context;
-import javax.naming.InitialContext;
-import javax.naming.NamingException;
-import javax.sql.DataSource;
+import java.util.ArrayList;
 
 import kr.co.kic.dev1.dto.MemberDto;
 import kr.co.kic.dev1.util.ConnLocator;
 
 public class MemberDao {
 	private static MemberDao single;
+
 	private MemberDao() {
-		
+
 	}
+
 	public static MemberDao getInstance() {
-		if(single==null) {
+		if (single == null) {
 			single = new MemberDao();
 		}
 		return single;
 	}
-	
+
 	public boolean insert(MemberDto m) {
 		boolean isSuccess = false;
-		DataSource ds = null;
 		Connection con = null;
 		PreparedStatement pstmt = null;
-		
-		
-				
-		
+		int index = 1;
+
 		try {
-			//ds.getConnection()은 이미 만들어진 Connection Pool에
-			//있는 Connection 객체를 가져온다.
-			//다시말해서 이 시점에서 Connection 객체를 생성하는 것이 아니라
-			//이미 만들어진 Connection 객체를 사용하는 것이다.
 			con = ConnLocator.getConnection();
-			
 			StringBuffer sql = new StringBuffer();
-			sql.append("INSERT INTO member(m_id,m_email,m_pwd )");
-			sql.append("VALUES(?,?,PASSWORD(? )) ");
+			sql.append("INSERT INTO member(m_seq,m_id,m_email,m_name,m_pwd,m_phone,m_regdate ) ");
+			sql.append("VALUES(NULL,?,?,?,password(?),?,NOW()); ");
+
 			pstmt = con.prepareStatement(sql.toString());
-			int index = 1;
-			pstmt.setString(index++,m.getId());
-			pstmt.setString(index++,m.getEmail());
-			pstmt.setString(index,m.getPwd());
+			// 바인딩 변수 세팅
 			
+			pstmt.setString(index++, m.getId());
+			pstmt.setString(index++, m.getEmail());
+			pstmt.setString(index++, m.getName());
+			pstmt.setString(index++, m.getPwd());
+			pstmt.setString(index++, m.getPhone());
+			
+
 			pstmt.executeUpdate();
 			isSuccess = true;
+
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} finally {
+			try {
+				if (con != null)
+					con.close();
+				if (pstmt != null)
+					pstmt.close();
+
+			} catch (SQLException e2) {
+				
+			}
+		}
+
+		return isSuccess;
+	}
+
+	
+
+	public boolean update(MemberDto m) {
+		boolean isSuccess = false;
+			Connection con = null;
+			PreparedStatement pstmt = null;
+			int index = 1;
 			
-		
+			try {
+				con = ConnLocator.getConnection();
+				StringBuffer sql = new StringBuffer();
+				sql.append("UPDATE member ");
+				sql.append("SET m_id=? , m_email=?,m_name=?,m_pwd=PASSWORD(?),m_phone=?,m_regdate = NOW() ");
+				sql.append("where m_seq = ? ");
+				
+				pstmt = con.prepareStatement(sql.toString());
+				// 바인딩 변수 세팅
+				
+				pstmt.setString(index++, m.getId() );
+				pstmt.setString(index++, m.getEmail() );
+				pstmt.setString(index++, m.getName());
+				pstmt.setString(index++, m.getPwd());
+				pstmt.setString(index++, m.getPhone());
+				pstmt.setInt(index++, m.getSeq());
+				
+				pstmt.executeUpdate();
+				isSuccess = true;
+				
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} finally {
+				try {
+					if (con != null)
+						con.close();
+					if (pstmt != null)
+						pstmt.close();
+					
+				} catch (SQLException e2) {
+					e2.printStackTrace();
+					
+				}
+			}
+			
+			return isSuccess;
+
+	}
+
+	public boolean delete(int seq) {
+		boolean isSuccess = false;
+			Connection con = null;
+			PreparedStatement pstmt = null;
+			int index = 1;
+			
+			try {
+				con = ConnLocator.getConnection();
+				StringBuffer sql = new StringBuffer();
+				sql.append("delete from member ");
+				sql.append("where m_seq = ? ");
+				
+				pstmt = con.prepareStatement(sql.toString());
+				// 바인딩 변수 세팅
+				pstmt.setInt(index++,seq);
+				
+				
+				
+				pstmt.executeUpdate();
+				isSuccess = true;
+				
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} finally {
+				try {
+					if (con != null)
+						con.close();
+					if (pstmt != null)
+						pstmt.close();
+					
+				} catch (SQLException e2) {
+					e2.printStackTrace();
+					
+				}
+			}
+			
+			return isSuccess;
+
+	}
+
+	public MemberDto select(int seq) {
+		MemberDto obj = null;
+		Connection con = null;
+		PreparedStatement pstmt = null;
+		ResultSet rs = null;
+		int index = 1;
+		try {
+			con = ConnLocator.getConnection();
+			StringBuffer sql = new StringBuffer();
+			sql.append("SELECT m_seq,m_id,m_email,m_name,m_phone,DATE_FORMAT(m_regdate,'%Y/%m/%d') ");
+			sql.append("FROM member ");
+			sql.append("where m_seq = ? ");
+			
+			pstmt = con.prepareStatement(sql.toString());
+			pstmt.setInt(index++, seq);
+			
+			rs = pstmt.executeQuery();
+			if(rs.next()) {
+				index = 1;
+				seq = rs.getInt(index++);
+				String id = rs.getString(index++);
+				String email = rs.getString(index++);
+				String name = rs.getString(index++);
+				String phone = rs.getString(index++);
+				String regdate = rs.getString(index++);
+				
+				obj = new MemberDto(seq,id,email,name,phone,regdate);
+				
+			}
 			
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-		}finally {
+		} finally {
 			try {
-				if(pstmt != null) pstmt.close();
-				//Connection 객체를 종료하는것이 아니라 Connection pool에 Connection 객체를 반납하는 것이다.
-				if(con != null) con.close();
-								
+				if(con!=null)
+					con.close();
+				if(pstmt!=null)
+					pstmt.close();
+				if(rs!=null)
+					rs.close();
+
+			} catch (SQLException e2) {
+				
+
+			}
+		}
+		return obj;
+	}
+
+	public ArrayList<MemberDto> select(int start, int length) {
+		ArrayList<MemberDto> list = new ArrayList<MemberDto>();
+		Connection con = null;
+		PreparedStatement pstmt = null;
+		ResultSet rs = null;
+		int index = 1;
+		try {
+			con = ConnLocator.getConnection();
+			StringBuffer sql = new StringBuffer();
+			sql.append("SELECT m_seq, m_id , m_email , m_name,m_phone,m_regdate,DATE_FORMAT(m_regdate,'%Y/%m/%d ') ");
+			sql.append("from member ");
+			sql.append("order by m_seq desc ");
+			sql.append("LIMIT ?,? ");
+			pstmt = con.prepareStatement(sql.toString());
+			//바인딩 변수 세팅
+			pstmt.setInt(index++,start);
+			pstmt.setInt(index++,length);
+			
+			rs = pstmt.executeQuery();
+			while(rs.next()) {
+				index  = 1;
+				int seq = rs.getInt(index++);
+				String id = rs.getString(index++);
+				String email = rs.getString(index++);
+				String name = rs.getString(index++);
+				String phone = rs.getString(index++);
+				String regdate = rs.getString(index++);
+				list.add(new MemberDto(seq,id,email,name,phone,regdate));
+			}
+		} catch(SQLException e) {
+			e.printStackTrace();
+		} finally {
+			try {
+				if(rs != null)
+					rs.close();
+				if(pstmt != null)
+					pstmt.close();
+				if(con != null)
+					con.close();
 			}catch(SQLException e2) {
 				
 			}
+			
 		}
 		
-		return isSuccess;
-	}
+		return list;
 
+	}
 }
+
+
