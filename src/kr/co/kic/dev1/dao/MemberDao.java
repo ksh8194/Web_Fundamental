@@ -78,7 +78,8 @@ public class MemberDao {
 				con = ConnLocator.getConnection();
 				StringBuffer sql = new StringBuffer();
 				sql.append("UPDATE member ");
-				sql.append("SET m_id=? , m_email=?,m_name=?,m_pwd=PASSWORD(?),m_phone=?,m_regdate = NOW() ");
+				sql.append("SET m_id=? , m_email=?,m_name=?,m_phone=?,m_regdate = NOW() ");
+				//sql.append("m_pwd = password(?) ");
 				sql.append("where m_seq = ? ");
 				
 				pstmt = con.prepareStatement(sql.toString());
@@ -87,7 +88,7 @@ public class MemberDao {
 				pstmt.setString(index++, m.getId() );
 				pstmt.setString(index++, m.getEmail() );
 				pstmt.setString(index++, m.getName());
-				pstmt.setString(index++, m.getPwd());
+				//pstmt.setString(index++, m.getPwd());
 				pstmt.setString(index++, m.getPhone());
 				pstmt.setInt(index++, m.getSeq());
 				
@@ -252,6 +253,43 @@ public class MemberDao {
 		
 		return list;
 
+	}
+	public int getRows() {
+		int count = 0; ;
+		Connection con = null;
+		PreparedStatement pstmt = null;
+		ResultSet rs = null;
+		int index = 1;
+		try {
+			con = ConnLocator.getConnection();
+			StringBuffer sql = new StringBuffer();
+			sql.append("SELECT COUNT(*) FROM member;");
+			
+			pstmt = con.prepareStatement(sql.toString());
+		
+			
+			rs = pstmt.executeQuery();
+			while(rs.next()) {
+				index  = 1;
+				count = rs.getInt(index);
+			}
+		} catch(SQLException e) {
+			e.printStackTrace();
+		} finally {
+			try {
+				if(rs != null)
+					rs.close();
+				if(pstmt != null)
+					pstmt.close();
+				if(con != null)
+					con.close();
+			}catch(SQLException e2) {
+				
+			}
+			
+		}
+		
+		return count;
 	}
 }
 

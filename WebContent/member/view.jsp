@@ -34,8 +34,8 @@
 					<form class="form-horizontal" role="form" name="f" method="post"
 						action="">
 						<div class="form-group">
-							<label class="col-form-label" for="name">성명</label> <input
-								type="text" class="form-control" name="name" id="name"
+							<label class="col-form-label" for="name">이름</label> <input
+								type="text" class="form-control" name="name"value="<%=name %>" id="name" 
 								placeholder="이름을 입력해 주세요">
 						</div>
 						<div class="form-group">
@@ -62,7 +62,7 @@
 							</a>
 						</div>
 						--%>
-						<input type="hidden" name="seq" vlaue="<%=seq%>"/>
+						<input type="hidden" name="seq" value="<%=seq%>"/>
 					</form>
 					<div class="text-right">
 							<a href="" id="modifyMember" class="btn btn-outline-primary">수정</a>
@@ -70,7 +70,7 @@
 							<a href="list.jsp" class="btn btn-outline-success">리스트</a>
 						</div>
 						<script>
-							$(function()){
+							$(function(){
 							$("#modifyMember").on("click",function(event){
 								event.preventDefault();
 								f.action = "modify.jsp";
@@ -91,7 +91,8 @@
 
 	</div>
 </div>
-<%@ incldue file="../inc/footer.jsp"%>
+
+<%@ include file="../inc/footer.jsp"%>
 <%
 	} else {
 %>
@@ -102,3 +103,4 @@
 <%
 	}
 %>
+

@@ -5,12 +5,12 @@
 
 <%
 	request.setCharacterEncoding("utf-8");
-	int seq = Integer.parseInt(request.getParameter(""));
+	int seq = Integer.parseInt(request.getParameter("seq"));
 	String name = request.getParameter("name");
 	String id = request.getParameter("id");
 	String email = request.getParameter("email");
 	String phone = request.getParameter("phone");
-	MemberDto dto = new MemberDao(seq,name,id,email,phone);
+	MemberDto dto = new MemberDto(seq,name,id,email,phone);
 	MemberDao dao = MemberDao.getInstance();
 	boolean isSuccess = dao.update(dto);
 	if(isSuccess){
