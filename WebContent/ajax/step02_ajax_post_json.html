@@ -5,7 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Ajax Get Demo</title>
+    <title>Ajax Post Demo</title>
     <script>
     	var xhr = null;
     	try{
@@ -25,7 +25,9 @@
     <button id="loadAjax">Ajax 불러오기</button>
     <script>
     document.getElementById("loadAjax").addEventListener("click",function(){
-		xhr.open("GET",'member_json.jsp?start=1&length=20',true);
+    	let param = "start=0&length=20";
+		xhr.open("POST",'member_json.jsp',true);
+		xhr.setRequestHeader("Content-type","application/x-www-form-urlencoded");
 		xhr.onreadystatechange = function(){
 			//onreadystatechange 함수는 url에서 응답올때 까지 기다린다.
 			if(xhr.readyState = 4 && xhr.status==200){
@@ -47,7 +49,7 @@
 				
 			}
 		}
-		xhr.send(null);
+		xhr.send(param);
 				//정상적인 경우
     
 		});

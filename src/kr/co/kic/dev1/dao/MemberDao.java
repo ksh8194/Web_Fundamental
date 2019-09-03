@@ -209,6 +209,51 @@ public class MemberDao {
 		return obj;
 	}
 
+	public ArrayList<MemberDto> select(int start, int length){
+		ArrayList<MemberDto> list = new ArrayList<MemberDto>();
+		Connection con = null;
+		PreparedStatement pstmt = null;
+		ResultSet rs = null;
+		int index = 1;
+		try {
+			con = ConnLocator.getConnection();
+			StringBuffer sql = new StringBuffer();
+			sql.append("SELECT m_seq, m_id, m_email,m_name, ");
+			sql.append("m_phone, date_format(m_regdate,'%Y/%m/%d') ");
+			sql.append("FROM member ");
+			sql.append("ORDER BY m_seq DESC ");
+			sql.append("LIMIT ?,?  ");
+			pstmt = con.prepareStatement(sql.toString());
+			//바인딩 변수 세팅
+			pstmt.setInt(index++,start );
+			pstmt.setInt(index++,length );
+			
+			rs = pstmt.executeQuery();
+			while(rs.next()) {
+				index = 1;
+				int seq = rs.getInt(index++);
+				String id = rs.getString(index++);
+				String email = rs.getString(index++);
+				String name = rs.getString(index++);
+				String phone = rs.getString(index++);
+				String regdate = rs.getString(index++);
+				list.add(new MemberDto(seq,id,email,name,phone,regdate));
+			}
+			
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} finally {
+			try {
+				if(rs != null) rs.close();
+				if(pstmt != null) pstmt.close();
+				if(con != null) con.close();
+			} catch (SQLException e2) {
+				// TODO: handle exception
+			}
+		}
+		
+		return list;
+	}
 	
 	public int getRows() {
 		int count = 0; ;
@@ -268,26 +313,26 @@ public class MemberDao {
 			pstmt.setInt(index++,length);
 			
 			rs = pstmt.executeQuery();
-			JSONObject item = null;
+			JSONObject items = null;
 			while(rs.next()) {
 				index  = 1;
-				item = new JSONObject();
+				items = new JSONObject();
 				int seq = rs.getInt(index++);
 				String id = rs.getString(index++);
 				String email = rs.getString(index++);
 				String name = rs.getString(index++);
 				String phone = rs.getString(index++);
 				String regdate = rs.getString(index++);
-				item.put("seq",seq);
-				item.put("id",id);
-				item.put("email",email);
-				item.put("name",name);
-				item.put("phone",phone);
-				item.put("regdate",regdate);
-				jsonArray.add(item);
+				items.put("seq",seq);
+				items.put("id",id);
+				items.put("email",email);
+				items.put("name",name);
+				items.put("phone",phone);
+				items.put("regdate",regdate);
+				jsonArray.add(items);
 			
 			}
-			jsonObj.put("item",jsonArray);
+			jsonObj.put("items",jsonArray);
 		} catch(SQLException e) {
 			e.printStackTrace();
 		} finally {
