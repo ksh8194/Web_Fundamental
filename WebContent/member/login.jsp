@@ -1,45 +1,5 @@
 <%@ page pageEncoding="UTF-8"%>
-<!doctype html>
-<html lang="en">
-
-<head>
-  <!-- Required meta tags -->
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-
-  <!-- Bootstrap CSS -->
-  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
-    integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
-
-  <title>Bootstrap Template</title>
-</head>
-
-<body>
-  <nav class="navbar navbar-expand-lg navbar-dark" style="background-color:#563d7c;">
-    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarTogglerDemo01"
-      aria-controls="navbarTogglerDemo01" aria-expanded="false" aria-label="Toggle navigation">
-      <span class="navbar-toggler-icon"></span>
-    </button>
-    <div class="collapse navbar-collapse" id="navbarTogglerDemo01">
-      <ul class="navbar-nav mr-auto mt-2 mt-lg-0">
-        <li class="nav-item active">
-          <a class="nav-link" href="/">Home</a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" href="/notice/list.jsp">Noitce</a>
-        </li>
-
-      </ul>
-      <ul class="navbar-nav">
-        <li class="nav-item">
-          <a class="nav-link" href="/member/register.jsp">Register</a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" href="/member/login.jsp">Login</a>
-        </li>
-      </ul>
-    </div>
-  </nav>
+<%@ include file="../inc/header.jsp" %>
   <nav aria-label="breadcrumb">
     <ol class="breadcrumb justify-content-end">
       <li class="breadcrumb-item"><a href="/">Home</a></li>
@@ -51,42 +11,90 @@
       <div class="col-sm-12">
         <div class="card">
           <div class="card-body">
+          	<%if(memberDto == null){ %>
             <h5 class="card-title">로그인</h5>
-            <form>
+            <form name="f" method="post" action="check_login.jsp">
               <div class="form-group">
-                <input type="text" class="form-control" placeholder="Your Email *" value="" />
+                <input type="email" id="email" name="email" class="form-control" placeholder="Your Email *" value="" />
               </div>
               <div class="form-group">
-                <input type="password" class="form-control" placeholder="Your Password *" value="" />
+                <input type="password" id="pwd" name="pwd" class="form-control" placeholder="Your Password *" value="" />
+              </div>
+              
+              
+              <div class="form-row d-flex align-items-center">
+                      <div class="form-group col-md-8">
+                        <img class="form-control" src="" id="img_form_url"/>
+                      </div>
+                      <div class="form-group col-md-4">
+                        <a href="" id="refreshNumber" class="btn btn-info btn-lg btn-block"><i class="fa fa-refresh" aria-hidden="true"></i> REFRESH</a>
+                      </div>
               </div>
               <div class="form-group">
-                <input type="submit" class="btn btn-primary" value="Login" />
+                      <input type="text" name="captchaCode" id="captchaCode" class="form-control" placeholder="캡차코드를 입력하세요" value="" />
+              </div>
+              
+              
+              <div class="form-group">
+                <input type="submit" id="checkLogin" class="btn btn-primary" value="Login" />
               </div>
               <div class="form-group">
-                <a href="#" class="ForgetPwd">Forget Password?</a>
+                <a href="" id="forgetPwd" class="ForgetPwd">Forget Password?</a>
               </div>
             </form>
+            <script>
+            	$(function(){
+            		let captchaKey = "";
+            		$("#checkLogin").on("click",function(event){
+            			event.preventDefault();
+            			if($("#email").val()==""){
+            				alert('이메일을 입력하세요.');
+            				$("#email").focus();
+            				return;
+            			}
+            			if($("#pwd").val()==""){
+            				alert('비밀번호를 입력하세요.');
+            				$("#pwd").focus();
+            				return;
+            			}
+            			
+            			f.submit();
+            		});
+            		var loadImage = function(){
+            			$.ajax({
+            				url : 'captcha/getKey.jsp',
+            				type : 'GET',
+            				dataType : 'json',
+            				error : function(){
+            					alert('error loading json');
+            				},
+            				success : function(json){
+            					console.log(json);
+            					captchaKey = json.key;
+            					$.ajax({
+            						type : 'GET',
+            						url : 'captcha/getImage.jsp?key='+captchaKey,xhrFields :{
+            							responseType : 'blob'
+            						},
+            						success : function(data){ //data = 이미지
+            							const url = window.URL || window.webketURL;
+            							const src = url.createObjectURL(data);
+            							$("#img_form_url").attr("src",src); //src = 주소?
+            						}
+            					});
+            				}
+            			});
+            		}
+            		loadImage();
+            	});
+            </script>
+            <%}else{ %>
+            	<h5 class="card-title">로그인을 하셨습니다.</h5>
+            	
+            <%} %>
           </div>
         </div>
       </div>
     </div>
   </div>
-  <footer id="sticky-footer" class="py-4 bg-dark" style="color:white; margin-top: 1rem;">
-    <div class="container text-center">
-      <small>Copyright &copy; Your Website</small>
-    </div>
-  </footer>
-  <!-- Optional JavaScript -->
-  <!-- jQuery first, then Popper.js, then Bootstrap JS -->
-  <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"
-    integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous">
-    </script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"
-    integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous">
-    </script>
-  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"
-    integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous">
-    </script>
-</body>
-
-</html>
+  <%@ include file="../inc/footer.jsp"%>

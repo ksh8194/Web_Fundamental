@@ -19,7 +19,7 @@
 			<div class="col-sm-12">
 				<div class="card">
 					<div class="card-body">
-						<h5 class="card-title">회원리스트</h5>
+						<h5 class="card-title">공지사항</h5>
 
 						<div class="table-responsive-md">
 							<table class="table table-hover">
@@ -85,10 +85,7 @@
 								</ul>
 							</nav>
 
-							<div class="text-right">
-								<a href="write.jsp" class="btn btn-outline-primary">글쓰기</a>
-								<a href="#" class="btn btn-outline-success">리스트</a>
-							</div>
+							
 
 						</div>
 					</div>

@@ -1,5 +1,3 @@
-
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -13,69 +11,71 @@
            $('.error').hide();
            $('#id').focus();
 
-           //$('#sendMember').click(function(event){
-            //$('#sendMember').on('click',function(event){
-            $('#sendMember').bind('click',function(event){
-               //기본기능을 방지하기 위해서 사용한다.
-               event.preventDefault();
-               //유효성 검사
-               let id = $('#id').val();
-               let email = $('#email').val();
-               let pw = $('#password').val();
-               let cpw = $('#checkPassword').val();
-               if(id == ""){
-                   $("#errorId").show();
-                   //$('#id').css('border','2px solid red')
-                   $('#id').focus();
-                   return;
-               }else{
-                   $('#errorId').hide();
-               }
+           //$("#sendMember").click(function(event){
+           $("#sendMember").on('click',function(event){
+           // $("#sendMember").bind('click',function(event){
+                // 기본기능을 방지하기 위해서 사용한다.
+                event.preventDefault();
+                //유효성 검사
+                let id = $('#id').val();
+                let email = $('#email').val();
+                let password = $('#password').val();
+                let checkPassword = $('#checkPassword').val();
+                if(id){
+                    $("#errorId").hide();
+                }else{
+                    $("#errorId").show('fast');
+                    $('#id').focus();
+                    return;
+                }
 
-               
-               if(email == ""){
-                   $("#errorEmail").show();
-                   $('#email').focus();
-                   return;
-               }else{
-                   $('#errorEmail').hide();
-               }
+                if(email){
+                    $("#errorEmail").hide();
+                }else{
+                    $("#errorEmail").show('fast');
+                    $('#email').focus();
+                    return;
+                }
+                if(password){
+                    $("#errorPassword").hide();
+                }else{
+                    $("#errorPassword").show('fast');
+                    $('#password').focus();
+                    return;
+                }
 
+                if(checkPassword){
+                    $("#errorCheckPassword").hide();
+                }else{
+                    $("#errorMissmatchPassword").hide();
+                    $("#errorCheckPassword").show('fast');
+                    $('#checkPassword').focus();
+                    return;
+                }
 
-               if(pw){
-                   $('#errorPassword').hide();
-                   
-               }else{
-                $("#errorPassword").show();
-                   $('#password').focus();
-                   return;
-               }
-
-
-               if(cpw){
-                   $('#errorCheckPassword').hide();
-                   
-               }else{
-                $("#errorCheckPassword").show();
-                   $('#checkPassword').focus();
-                   $('#errorMissmatchPassword').hide();
-                   return;
-               }
-
-
-               if(pw != cpw){
-                   $('#errorMissmatchPassword').show();
-                   $('#checkPassword').val("");
-                   $('#checkPassword').focus();
-                   return;
-               } else {
-                   $('#errorMissmatchPassword').hide();
-                   
-               }
-
-               f.submit();
-           })
-        })
+                if(password != checkPassword){
+                    $("#errorMissmatchPassword").show('fast');
+                    $('#checkPassword').val("");
+                    $('#checkPassword').focus();
+                    return; 
+                }else{
+                    $("#errorMissmatchPassword").hide();
+                    $("#errorCheckPassword").hide();
+                }
+                f.submit();
+                /*
+                $.ajax({
+               	  method: "DELETE",
+               	  url: "/member/join",
+               	  data: { name: "John", location: "Boston" },
+               	  dataType : 'html',
+               	  success : function(response){
+               		 alert(response);
+               	  }
+               	});
+                */
+           });
+        });
     </script>
     <style>
         .error {
@@ -86,7 +86,7 @@
 </head>
 <body>
         <h3>jQuery Event</h3>
-        <form action="/member/join" method="post" name ="f">
+        <form action="/member/join" method="POST" name="f">
             <label for="id">아이디</label>
             <input type="text" name="id" id="id" placeholder="아이디">
             <span class="error" id="errorId">아이디를 입력하세요</span>
@@ -108,9 +108,11 @@
             <span class="error" id="errorMissmatchPassword">비밀번호가 일치하지 않습니다.</span>
             <br>
 
-            
             <button type="submit" id="sendMember">회원가입</button>
             <button type="reset">취소</button>
+            <input type="hidden" name="_method" value="PUT"/>
+
         </form>
+        
 </body>
 </html>

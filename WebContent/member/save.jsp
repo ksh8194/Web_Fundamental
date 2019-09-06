@@ -8,19 +8,21 @@
 	String email = request.getParameter("email");
 	String pwd = request.getParameter("pwd");
 	String phone = request.getParameter("phone");
-
+	
 	MemberDao dao = MemberDao.getInstance();
-	MemberDto dto = new MemberDto(id,email, name, pwd, phone);
+	MemberDto dto = new MemberDto(id,email,name,pwd,phone);
 	boolean isSuccess = dao.insert(dto);
-	if(isSuccess){
+	if(isSuccess){	
 %>
 	<script>
-		alert("성공");
-		location.href = 'list.jsp';
+		alert('성공');
+		location.href='list.jsp';
 	</script>
-	<%}else{%>
+<%}else{ %>
 	<script>
 		alert('실패');
 		history.back(-1);
 	</script>
-	<%}%>
+<%} %>
+
+

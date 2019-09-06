@@ -1,4 +1,10 @@
+<%@page import="kr.co.kic.dev1.dto.MemberDto"%>
 <%@ page pageEncoding="UTF-8"%>
+<%
+	MemberDto memberDto = 
+		(MemberDto)session.getAttribute("member");
+	
+%>
 <!doctype html>
 <html lang="en">
 
@@ -10,9 +16,11 @@
 	<!-- Bootstrap CSS -->
 	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
 		integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
-	<!--BootStrap icon  -->
+	<!-- Font Awesome CSS -->
 	<link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css" rel="stylesheet" integrity="sha384-T8Gy5hrqNKT+hzMclPo118YTQO6cYprQmhrYwIiQ/3axmI1hQomh7Ud2hPOy8SP1" crossorigin="anonymous">
 	<script src="../js/jquery-3.4.1.js"></script>
+	<script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+  
 	<title>Bootstrap Template</title>
 </head>
 
@@ -31,21 +39,30 @@
 					<a class="nav-link" href="/notice/list.jsp">Notice</a>
 				</li>
 				<li class="nav-item">
+					<a class="nav-link" href="/emp/list.jsp">Emp</a>
+				</li>
+				<li class="nav-item">
+					<a class="nav-link" href="/dept/list.jsp">Dept</a>
+				</li>
+				<li class="nav-item">
 					<a class="nav-link" href="/member/list.jsp">Member</a>
 				</li>
 				<li class="nav-item">
-					<a class="nav-link" href="/emp/list.jsp">Emp</a>
+					<a class="nav-link" href="/file/index.jsp">File Upload</a>
 				</li>
 
 			</ul>
 			<ul class="navbar-nav">
 				<li class="nav-item">
-					<a class="nav-link" href="/member/register.jsp">Register</a>
+					<a class="nav-link" href="/member/register.jsp"><i class="fa fa-file-text-o"></i> Register</a>
 				</li>
 				<li class="nav-item">
-					<a class="nav-link" href="/member/login.jsp"><i class="fa fa-user"></i>Login</a>
+					<%if(memberDto == null){ %>
+					<a class="nav-link" href="/member/login.jsp"><i class="fa fa-user"></i> Login</a>
+					<%}else{ %>
+					<a class="nav-link" href="/member/logout.jsp"><i class="fa fa-user"></i> Logout(<%=memberDto.getName() %>님 환영합니다.)</a>
+					<%} %>
 				</li>
-				
 			</ul>
 		</div>
 	</nav>

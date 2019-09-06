@@ -13,12 +13,12 @@
 
 	
 	JSONObject item2 = new JSONObject();
-	item1.put("name","손정의1");
-	item1.put("clubid","story3388");
+	item2.put("name","손정의1");
+	item2.put("clubid","story3388");
 	
 	JSONObject item3 = new JSONObject();
-	item1.put("name","손정의2");
-	item1.put("clubid","story33881");
+	item3.put("name","손정의2");
+	item3.put("clubid","story33881");
 
 	jsonArray.add(item1);
 	jsonArray.add(item2);
